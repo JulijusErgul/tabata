@@ -8,7 +8,7 @@ A modern, responsive Tabata timer built with **Angular 19** and **Material Desig
 
 ## 🚀 Live Demo
 
-**[Try the Tabata Timer Now](https://yourusername.github.io/mitt-projekt/)**
+**[Try the Tabata Timer Now](https://julijusergul.github.io/mitt-projekt/)**
 
 ## ✨ Features
 
@@ -70,7 +70,7 @@ A modern, responsive Tabata timer built with **Angular 19** and **Material Desig
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/mitt-projekt.git
+git clone https://github.com/julijusergul/mitt-projekt.git
 cd mitt-projekt
 
 # Install dependencies
@@ -103,7 +103,7 @@ This project uses GitHub Actions for automatic deployment to GitHub Pages:
 1. **Push to main branch** - Automatic deployment triggers
 2. **GitHub Actions builds** the application
 3. **Deploys to GitHub Pages** automatically
-4. **Live at**: `https://yourusername.github.io/mitt-projekt/`
+4. **Live at**: `https://julijusergul.github.io/mitt-projekt/`
 
 ### Manual Deployment
 ```bash
@@ -181,9 +181,9 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ## 📞 Support
 
-- **Issues**: [GitHub Issues](https://github.com/yourusername/mitt-projekt/issues)
+- **Issues**: [GitHub Issues](https://github.com/julijusergul/mitt-projekt/issues)
 - **Documentation**: [Deployment Guide](DEPLOYMENT.md)
-- **Live Demo**: [https://yourusername.github.io/mitt-projekt/](https://yourusername.github.io/mitt-projekt/)
+- **Live Demo**: [https://julijusergul.github.io/mitt-projekt/](https://julijusergul.github.io/mitt-projekt/)
 
 ---
 
