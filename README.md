@@ -8,7 +8,7 @@ A modern, responsive Tabata timer built with **Angular 19** and **Material Desig
 
 ## 🚀 Live Demo
 
-**[Try the Tabata Timer Now](https://julijusergul.github.io/mitt-projekt/)**
+**[Try the Tabata Timer Now](https://julijusergul.github.io/tabata/)**
 
 ## ✨ Features
 
@@ -70,8 +70,8 @@ A modern, responsive Tabata timer built with **Angular 19** and **Material Desig
 
 ```bash
 # Clone the repository
-git clone https://github.com/julijusergul/mitt-projekt.git
-cd mitt-projekt
+git clone https://github.com/julijusergul/tabata.git
+cd tabata
 
 # Install dependencies
 npm install
@@ -103,7 +103,7 @@ This project uses GitHub Actions for automatic deployment to GitHub Pages:
 1. **Push to main branch** - Automatic deployment triggers
 2. **GitHub Actions builds** the application
 3. **Deploys to GitHub Pages** automatically
-4. **Live at**: `https://julijusergul.github.io/mitt-projekt/`
+4. **Live at**: `https://julijusergul.github.io/tabata/`
 
 ### Manual Deployment
 ```bash
@@ -134,10 +134,10 @@ src/
 - **Standalone Components**: Modern Angular architecture
 - **Material Design**: Azure Blue theme
 - **Production Optimizations**: Enabled for GitHub Pages
-- **Base Href**: Configured for `/mitt-projekt/` path
+- **Base Href**: Configured for `/tabata/` path
 
 ### Build Configuration
-- **Output Path**: `dist/mitt-projekt`
+- **Output Path**: `dist/tabata`
 - **Asset Optimization**: Minified and compressed
 - **Cache Busting**: File hashing for optimal caching
 - **Source Maps**: Available in development
@@ -181,9 +181,9 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ## 📞 Support
 
-- **Issues**: [GitHub Issues](https://github.com/julijusergul/mitt-projekt/issues)
+- **Issues**: [GitHub Issues](https://github.com/julijusergul/tabata/issues)
 - **Documentation**: [Deployment Guide](DEPLOYMENT.md)
-- **Live Demo**: [https://julijusergul.github.io/mitt-projekt/](https://julijusergul.github.io/mitt-projekt/)
+- **Live Demo**: [https://julijusergul.github.io/tabata/](https://julijusergul.github.io/tabata/)
 
 ---
 

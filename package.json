@@ -1,5 +1,5 @@
 {
-  "name": "mitt-projekt",
+  "name": "tabata",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -8,7 +8,7 @@
     "build:github-pages": "ng build --configuration github-pages",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "deploy": "npm run build:github-pages && npx angular-cli-ghpages --dir=dist/mitt-projekt"
+    "deploy": "npm run build:github-pages && npx angular-cli-ghpages --dir=dist/tabata"
   },
   "private": true,
   "dependencies": {

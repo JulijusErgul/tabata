@@ -6,7 +6,7 @@ This guide will help you deploy your Tabata Timer app to GitHub Pages.
 
 1. **GitHub Account**: Make sure you have a GitHub account
 2. **Repository**: Your project should be pushed to a GitHub repository
-3. **Repository Name**: The repository should be named `mitt-projekt` (or update the baseHref in angular.json)
+3. **Repository Name**: The repository should be named `tabata` (or update the baseHref in angular.json)
 
 ## Step-by-Step Deployment
 
@@ -38,7 +38,7 @@ git push origin master
 The GitHub Actions workflow (`.github/workflows/deploy.yml`) will automatically:
 - Build your Angular app for GitHub Pages
 - Deploy it to the `gh-pages` branch
-- Make it available at `https://yourusername.github.io/mitt-projekt/`
+- Make it available at `https://julijusergul.github.io/tabata/`
 
 ### 4. Manual Deployment (Alternative)
 
@@ -63,7 +63,7 @@ After deployment (automatic or manual):
 ## Configuration Details
 
 ### Base Href
-The app is configured with `baseHref: "/mitt-projekt/"` in the GitHub Pages build configuration. If your repository has a different name, update this in `angular.json`.
+The app is configured with `baseHref: "/tabata/"` in the GitHub Pages build configuration. If your repository has a different name, update this in `angular.json`.
 
 ### Build Configuration
 - **Production build** with optimizations
@@ -105,4 +105,4 @@ The deployed app is optimized for:
 - **Caching**: Proper cache headers and file hashing
 - **Mobile**: Responsive design for all devices
 
-Your Tabata Timer will be live at: `https://yourusername.github.io/mitt-projekt/` 
+Your Tabata Timer will be live at: `https://julijusergul.github.io/tabata/` 
