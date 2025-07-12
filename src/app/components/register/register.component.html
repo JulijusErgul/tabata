@@ -1,0 +1,130 @@
+<div class="register-container">
+  <mat-card class="register-card">
+    <mat-card-header>
+      <mat-card-title>Create Account</mat-card-title>
+      <mat-card-subtitle>Join Tabata Timer to track your workouts</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form (ngSubmit)="onSubmit()" #registerForm="ngForm" class="register-form">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Username</mat-label>
+          <input
+            matInput
+            type="text"
+            [(ngModel)]="credentials.username"
+            name="username"
+            placeholder="Choose a username"
+            required
+            minlength="3">
+          <mat-icon matSuffix>person</mat-icon>
+          <mat-error *ngIf="registerForm.form.get('username')?.hasError('minlength')">
+            Username must be at least 3 characters
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Email</mat-label>
+          <input
+            matInput
+            type="email"
+            [(ngModel)]="credentials.email"
+            name="email"
+            placeholder="Enter your email address"
+            required
+            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
+          <mat-icon matSuffix>email</mat-icon>
+          <mat-error *ngIf="registerForm.form.get('email')?.hasError('pattern')">
+            Please enter a valid email address
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Password</mat-label>
+          <input
+            matInput
+            [type]="showPassword ? 'text' : 'password'"
+            [(ngModel)]="credentials.password"
+            name="password"
+            placeholder="Create a password"
+            required
+            minlength="6">
+          <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="togglePasswordVisibility()"
+            [attr.aria-label]="'Hide password'"
+            [attr.aria-pressed]="showPassword">
+            <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          <mat-error *ngIf="registerForm.form.get('password')?.hasError('minlength')">
+            Password must be at least 6 characters
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Password Strength Indicator -->
+        <div class="password-strength" *ngIf="credentials.password">
+          <div class="strength-bar">
+            <div
+              class="strength-fill"
+              [style.width.%]="getPasswordStrength() === 'weak' ? 33 : getPasswordStrength() === 'medium' ? 66 : 100"
+              [style.background-color]="getPasswordStrengthColor()">
+            </div>
+          </div>
+          <span class="strength-text" [style.color]="getPasswordStrengthColor()">
+            Password strength: {{ getPasswordStrength() }}
+          </span>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Confirm Password</mat-label>
+          <input
+            matInput
+            [type]="showConfirmPassword ? 'text' : 'password'"
+            [(ngModel)]="credentials.confirmPassword"
+            name="confirmPassword"
+            placeholder="Confirm your password"
+            required>
+          <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="toggleConfirmPasswordVisibility()"
+            [attr.aria-label]="'Hide password'"
+            [attr.aria-pressed]="showConfirmPassword">
+            <mat-icon>{{ showConfirmPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          <mat-error *ngIf="credentials.confirmPassword && credentials.password !== credentials.confirmPassword">
+            Passwords do not match
+          </mat-error>
+        </mat-form-field>
+
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          class="register-button"
+          [disabled]="isLoading || !registerForm.form.valid || credentials.password !== credentials.confirmPassword">
+          <mat-icon *ngIf="!isLoading">person_add</mat-icon>
+          <mat-spinner *ngIf="isLoading" diameter="20"></mat-spinner>
+          {{ isLoading ? 'Creating Account...' : 'Create Account' }}
+        </button>
+      </form>
+
+      <mat-divider class="divider"></mat-divider>
+
+      <div class="login-section">
+        <p>Already have an account?</p>
+        <button
+          mat-stroked-button
+          color="primary"
+          (click)="navigateToLogin()"
+          class="login-button">
+          <mat-icon>login</mat-icon>
+          Sign In
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
