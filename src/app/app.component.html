@@ -1,1 +1,19 @@
-<app-tabata-timer></app-tabata-timer>
+<div class="app-container">
+  <!-- Navigation Header -->
+  <header class="app-header" *ngIf="authService.isLoggedIn()">
+    <div class="header-content">
+      <h1 class="app-title">⏱️ Tabata Timer</h1>
+      <div class="user-section">
+        <span class="welcome-text">Welcome, {{ authService.getCurrentUser()?.username }}!</span>
+        <button mat-icon-button (click)="authService.logout()" class="logout-btn">
+          <mat-icon>logout</mat-icon>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="app-main">
+    <router-outlet></router-outlet>
+  </main>
+</div>

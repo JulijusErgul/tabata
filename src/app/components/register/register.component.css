@@ -1,0 +1,222 @@
+.register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+}
+
+.register-card {
+  max-width: 450px;
+  width: 100%;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.register-card mat-card-header {
+  background: linear-gradient(135deg, #1976d2, #42a5f5);
+  color: white;
+  margin: -16px -16px 24px -16px;
+  padding: 24px 16px;
+  text-align: center;
+}
+
+.register-card mat-card-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.register-card mat-card-subtitle {
+  color: rgba(255, 255, 255, 0.9);
+  margin: 8px 0 0 0;
+  font-size: 14px;
+}
+
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.register-button {
+  height: 48px;
+  font-size: 16px;
+  font-weight: 500;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.register-button mat-icon {
+  margin-right: 8px;
+}
+
+.divider {
+  margin: 24px 0;
+}
+
+.login-section {
+  text-align: center;
+}
+
+.login-section p {
+  margin: 0 0 16px 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.login-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 0 auto;
+}
+
+/* Password Strength Indicator */
+.password-strength {
+  margin-top: -8px;
+  margin-bottom: 8px;
+}
+
+.strength-bar {
+  width: 100%;
+  height: 4px;
+  background-color: #e0e0e0;
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+
+.strength-fill {
+  height: 100%;
+  transition: width 0.3s ease, background-color 0.3s ease;
+  border-radius: 2px;
+}
+
+.strength-text {
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+/* Form field styling */
+mat-form-field {
+  margin-bottom: 8px;
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+  .register-container {
+    padding: 16px;
+  }
+
+  .register-card {
+    max-width: 100%;
+  }
+
+  .register-card mat-card-title {
+    font-size: 20px;
+  }
+
+  .register-card mat-card-subtitle {
+    font-size: 13px;
+  }
+}
+
+/* Animation for card entrance */
+.register-card {
+  animation: slideInUp 0.6s ease-out;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Loading spinner styling */
+mat-spinner {
+  margin-right: 8px;
+}
+
+/* Success and error snackbar styling */
+::ng-deep .success-snackbar {
+  background: #4caf50;
+  color: white;
+}
+
+::ng-deep .error-snackbar {
+  background: #f44336;
+  color: white;
+}
+
+/* Focus states */
+mat-form-field:focus-within {
+  transform: scale(1.02);
+  transition: transform 0.2s ease;
+}
+
+/* Button hover effects */
+.register-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(25, 118, 210, 0.3);
+  transition: all 0.2s ease;
+}
+
+.login-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(25, 118, 210, 0.2);
+  transition: all 0.2s ease;
+}
+
+/* Password strength colors */
+.strength-fill[style*="rgb(244, 67, 54)"] {
+  background-color: #f44336 !important;
+}
+
+.strength-fill[style*="rgb(255, 152, 0)"] {
+  background-color: #ff9800 !important;
+}
+
+.strength-fill[style*="rgb(76, 175, 80)"] {
+  background-color: #4caf50 !important;
+}
+
+/* Form validation styling */
+mat-form-field.ng-invalid.ng-touched {
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+/* Password match indicator */
+.password-match {
+  color: #4caf50;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.password-mismatch {
+  color: #f44336;
+  font-size: 12px;
+  margin-top: 4px;
+}
