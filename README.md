@@ -1,32 +1,72 @@
-# Tabata Timer App
+# ⏱️ Tabata Timer App
 
-A modern, responsive Tabata timer built with Angular 19 and Material Design. Perfect for high-intensity interval training workouts.
+A modern, responsive Tabata timer built with **Angular 19** and **Material Design**. Perfect for high-intensity interval training (HIIT) workouts with customizable settings and a beautiful, intuitive interface.
 
-## Features
+![Tabata Timer](https://img.shields.io/badge/Angular-19.2.0-red?style=for-the-badge&logo=angular)
+![Material Design](https://img.shields.io/badge/Material%20Design-19.2.1-blue?style=for-the-badge&logo=material-design)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.7.2-blue?style=for-the-badge&logo=typescript)
 
-- ⏱️ **Customizable Timer**: Set work time, rest time, and number of rounds
-- 🔄 **Flexible Rest Intervals**: Configure how often rest periods occur
-- 🏋️ **Round Rest Periods**: Set longer rest periods between round sets
-- 📱 **Responsive Design**: Works perfectly on desktop and mobile devices
-- 🎨 **Modern UI**: Clean Material Design interface with smooth animations
-- ⏯️ **Full Controls**: Start, pause, resume, stop, and reset functionality
+## 🚀 Live Demo
 
-## Settings
+**[Try the Tabata Timer Now](https://yourusername.github.io/mitt-projekt/)**
 
-- **Rounds**: Number of work intervals (1-20)
-- **Work Time**: Duration of work periods in seconds (5-300)
-- **Rest Time**: Duration of short rest periods in seconds (5-120)
-- **Rest Frequency**: How often rest occurs (every N rounds)
-- **Rest Between Rounds**: Longer rest periods between round sets (0-300 seconds)
+## ✨ Features
 
-## Development
+### 🏋️ **Workout Customization**
+- **Flexible Rounds**: Set 1-20 work intervals
+- **Work Time**: 5-300 seconds per work period
+- **Rest Time**: 5-120 seconds per rest interval
+- **Rest Frequency**: Configure how often rest occurs (every N rounds)
+- **Round Rest**: Longer rest periods between round sets (0-300 seconds)
+
+### 🎯 **Timer Features**
+- **Real-time Countdown**: Large, easy-to-read digital display
+- **Phase Indicators**: Color-coded work/rest/round rest phases
+- **Progress Tracking**: Visual progress bar showing workout completion
+- **Round Counter**: Current round and total rounds display
+- **Total Time Calculator**: Automatic calculation of workout duration
+
+### 🎮 **Controls**
+- **Start**: Begin the workout
+- **Pause/Resume**: Pause and resume at any time
+- **Stop**: Stop and reset the timer
+- **Reset**: Reset to initial state
+
+### 📱 **User Experience**
+- **Responsive Design**: Works perfectly on desktop, tablet, and mobile
+- **Modern UI**: Clean Material Design with smooth animations
+- **Visual Feedback**: Color-coded phases and pulsing timer
+- **Accessibility**: Keyboard navigation and screen reader support
+
+## 🎨 Screenshots
+
+### Desktop View
+- Clean, professional interface with settings panel and timer display
+- Material Design cards with proper spacing and typography
+- Color-coded phase indicators (Orange for Work, Blue for Rest, Red for Round Rest)
+
+### Mobile View
+- Responsive layout that adapts to smaller screens
+- Touch-friendly buttons and controls
+- Optimized for one-handed use during workouts
+
+## 🛠️ Technology Stack
+
+- **Frontend Framework**: Angular 19.2.0 (Latest)
+- **UI Components**: Angular Material 19.2.1
+- **Styling**: CSS Grid, Flexbox, Material Design
+- **Language**: TypeScript 5.7.2
+- **Build Tool**: Angular CLI
+- **Deployment**: GitHub Pages with GitHub Actions
+
+## 📦 Installation & Setup
 
 ### Prerequisites
+- **Node.js** (version 18 or higher)
+- **npm** or **yarn**
+- **Git**
 
-- Node.js (version 18 or higher)
-- npm or yarn
-
-### Installation
+### Quick Start
 
 ```bash
 # Clone the repository
@@ -42,86 +82,111 @@ npm start
 
 The application will be available at `http://localhost:4200`
 
-### Build
+### Build Commands
 
 ```bash
-# Build for production
+# Development build
 npm run build
 
-# Build for GitHub Pages
+# Production build for GitHub Pages
 npm run build:github-pages
-```
 
-### Testing
-
-```bash
-# Run unit tests
+# Run tests
 npm test
 ```
 
-## Deployment
+## 🚀 Deployment
 
-### GitHub Pages (Automatic)
+### Automatic Deployment (Recommended)
+This project uses GitHub Actions for automatic deployment to GitHub Pages:
 
-This project is configured for automatic deployment to GitHub Pages using GitHub Actions. Simply push to the main branch and the app will be automatically deployed.
+1. **Push to main branch** - Automatic deployment triggers
+2. **GitHub Actions builds** the application
+3. **Deploys to GitHub Pages** automatically
+4. **Live at**: `https://yourusername.github.io/mitt-projekt/`
 
 ### Manual Deployment
+```bash
+# Build and deploy manually
+npm run deploy
+```
 
-If you prefer manual deployment:
-
-1. Build the project for GitHub Pages:
-   ```bash
-   npm run build:github-pages
-   ```
-
-2. Deploy using the angular-cli-ghpages tool:
-   ```bash
-   npm run deploy
-   ```
-
-### GitHub Pages Setup
-
-1. Go to your repository settings
-2. Navigate to "Pages" section
-3. Set source to "GitHub Actions"
-4. The workflow will automatically deploy your app
-
-## Project Structure
+## 📁 Project Structure
 
 ```
 src/
 ├── app/
 │   ├── tabata-timer/
-│   │   ├── tabata-timer.component.ts    # Main timer logic
-│   │   ├── tabata-timer.component.html  # Timer template
-│   │   └── tabata-timer.component.css   # Timer styles
+│   │   ├── tabata-timer.component.ts    # Main timer logic & state management
+│   │   ├── tabata-timer.component.html  # Timer UI template
+│   │   └── tabata-timer.component.css   # Timer styles & animations
 │   ├── app.component.ts                 # Root component
 │   ├── app.component.html               # Root template
 │   └── app.component.css                # Root styles
 ├── main.ts                              # Application bootstrap
-└── index.html                           # Entry point
+├── index.html                           # Entry point with Material setup
+└── styles.css                           # Global styles
 ```
 
-## Technologies Used
+## 🔧 Configuration
 
-- **Angular 19**: Latest version with standalone components
-- **Angular Material**: UI components and theming
-- **TypeScript**: Type-safe development
-- **CSS Grid & Flexbox**: Modern layout techniques
-- **GitHub Actions**: Automated deployment
+### Angular Configuration
+- **Standalone Components**: Modern Angular architecture
+- **Material Design**: Azure Blue theme
+- **Production Optimizations**: Enabled for GitHub Pages
+- **Base Href**: Configured for `/mitt-projekt/` path
 
-## Contributing
+### Build Configuration
+- **Output Path**: `dist/mitt-projekt`
+- **Asset Optimization**: Minified and compressed
+- **Cache Busting**: File hashing for optimal caching
+- **Source Maps**: Available in development
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
+## 🤝 Contributing
 
-## License
+We welcome contributions! Here's how you can help:
 
-This project is open source and available under the [MIT License](LICENSE).
+1. **Fork** the repository
+2. **Create** a feature branch (`git checkout -b feature/amazing-feature`)
+3. **Commit** your changes (`git commit -m 'Add amazing feature'`)
+4. **Push** to the branch (`git push origin feature/amazing-feature`)
+5. **Open** a Pull Request
 
-## Live Demo
+### Development Guidelines
+- Follow Angular style guide
+- Write meaningful commit messages
+- Add tests for new features
+- Ensure responsive design
+- Test on multiple devices
 
-Visit the live application: [https://yourusername.github.io/mitt-projekt/](https://yourusername.github.io/mitt-projekt/)
+## 🐛 Bug Reports & Feature Requests
+
+If you find a bug or have a feature request:
+
+1. **Check existing issues** to avoid duplicates
+2. **Create a new issue** with clear description
+3. **Include steps to reproduce** for bugs
+4. **Provide screenshots** if relevant
+
+## 📄 License
+
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- **Angular Team** for the amazing framework
+- **Material Design** for the beautiful UI components
+- **GitHub** for hosting and GitHub Pages
+- **Open Source Community** for inspiration and tools
+
+## 📞 Support
+
+- **Issues**: [GitHub Issues](https://github.com/yourusername/mitt-projekt/issues)
+- **Documentation**: [Deployment Guide](DEPLOYMENT.md)
+- **Live Demo**: [https://yourusername.github.io/mitt-projekt/](https://yourusername.github.io/mitt-projekt/)
+
+---
+
+**Made with ❤️ using Angular 19 and Material Design**
+
+*Perfect for your next HIIT workout session!*
