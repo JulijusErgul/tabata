@@ -8,7 +8,7 @@
     "build:github-pages": "ng build --configuration github-pages",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "deploy": "npm run build:github-pages && npx angular-cli-ghpages --dir=dist/tabata"
+    "deploy": "npm run build:github-pages && npx angular-cli-ghpages --dir=dist/tabata/browser"
   },
   "private": true,
   "dependencies": {
