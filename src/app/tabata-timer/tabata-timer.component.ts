@@ -9,6 +9,8 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { LoggerService } from '../services/logger.service';
 
 export interface TabataSettings {
   rounds: number;
@@ -16,6 +18,12 @@ export interface TabataSettings {
   restSeconds: number;
   restFrequency: number; // How often rest occurs (every N rounds)
   restBetweenRounds: number; // Rest time between complete rounds
+}
+
+export interface PreviousWorkout {
+  date: string; // ISO string
+  rounds: number;
+  workSeconds: number;
 }
 
 @Component({
@@ -52,9 +60,23 @@ export class TabataTimerComponent implements OnInit, OnDestroy {
   timeRemaining = 0;
   totalTime = 0;
   private interval: any;
+  previousWorkouts: PreviousWorkout[] = [];
+
+  constructor(private snackBar: MatSnackBar, private logger: LoggerService) {}
 
   ngOnInit() {
     this.resetTimer();
+    this.loadPreviousWorkouts();
+    // Show welcome snackbar if just registered
+    if (localStorage.getItem('showWelcomeSnackbar') === 'true') {
+      this.snackBar.open('Welcome to Tabata Timer! 🎉', 'Close', {
+        duration: 4000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['success-snackbar']
+      });
+      localStorage.removeItem('showWelcomeSnackbar');
+    }
   }
 
   ngOnDestroy() {
@@ -64,6 +86,7 @@ export class TabataTimerComponent implements OnInit, OnDestroy {
   }
 
   startTimer() {
+    this.logger.info('Timer started', this.settings);
     if (!this.isRunning) {
       this.isRunning = true;
       this.isPaused = false;
@@ -73,6 +96,7 @@ export class TabataTimerComponent implements OnInit, OnDestroy {
 
   pauseTimer() {
     this.isPaused = !this.isPaused;
+    this.logger.info(this.isPaused ? 'Timer paused' : 'Timer resumed');
     if (this.isPaused) {
       clearInterval(this.interval);
     } else {
@@ -80,14 +104,18 @@ export class TabataTimerComponent implements OnInit, OnDestroy {
     }
   }
 
-  stopTimer() {
+  stopTimer(workoutJustFinished: boolean = false) {
+    this.logger.info('Timer stopped');
     this.isRunning = false;
     this.isPaused = false;
     clearInterval(this.interval);
-    this.resetTimer();
+    if (!workoutJustFinished) {
+      this.resetTimer();
+    }
   }
 
   resetTimer() {
+    this.logger.info('Timer reset');
     this.currentRound = 0;
     this.currentPhase = 'work';
     this.timeRemaining = this.settings.workSeconds;
@@ -112,7 +140,8 @@ export class TabataTimerComponent implements OnInit, OnDestroy {
         this.timeRemaining = this.settings.restSeconds;
       } else if (this.currentRound >= this.settings.rounds) {
         // Workout complete
-        this.stopTimer();
+        this.saveWorkout();
+        this.stopTimer(true); // pass a flag to indicate workout just finished
         return;
       } else {
         // Move to next round
@@ -176,5 +205,38 @@ export class TabataTimerComponent implements OnInit, OnDestroy {
       case 'roundRest': return 'warn';
       default: return '';
     }
+  }
+
+  saveWorkout() {
+    const workout: PreviousWorkout = {
+      date: new Date().toISOString(),
+      rounds: this.settings.rounds,
+      workSeconds: this.settings.workSeconds
+    };
+    this.logger.info('Workout saved', workout);
+    const workouts = this.getStoredWorkouts();
+    workouts.unshift(workout); // newest first
+    localStorage.setItem('tabataWorkouts', JSON.stringify(workouts));
+    this.previousWorkouts = workouts;
+  }
+
+  loadPreviousWorkouts() {
+    this.previousWorkouts = this.getStoredWorkouts();
+  }
+
+  getStoredWorkouts(): PreviousWorkout[] {
+    const str = localStorage.getItem('tabataWorkouts');
+    return str ? JSON.parse(str) : [];
+  }
+
+  applySettings() {
+    this.logger.info('Tabata settings applied', this.settings);
+    this.resetTimer();
+    this.snackBar.open('Settings applied!', 'Close', {
+      duration: 2000,
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      panelClass: ['success-snackbar']
+    });
   }
 }

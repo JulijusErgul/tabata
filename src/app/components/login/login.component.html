@@ -8,25 +8,23 @@
     <mat-card-content>
       <form (ngSubmit)="onSubmit()" #loginForm="ngForm" class="login-form">
         <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Username or Email</mat-label>
           <input
             matInput
             type="text"
             [(ngModel)]="credentials.usernameOrEmail"
             name="usernameOrEmail"
-            placeholder="Enter your username or email"
+            placeholder="Username or Email"
             required>
           <mat-icon matSuffix>person</mat-icon>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Password</mat-label>
           <input
             matInput
             [type]="showPassword ? 'text' : 'password'"
             [(ngModel)]="credentials.password"
             name="password"
-            placeholder="Enter your password"
+            placeholder="Password"
             required>
           <button
             mat-icon-button

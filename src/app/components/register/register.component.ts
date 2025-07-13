@@ -11,6 +11,8 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AuthService, RegisterCredentials } from '../../services/auth.service';
+import { Subscription } from 'rxjs';
+import { LoggerService } from '../../services/logger.service';
 
 @Component({
   selector: 'app-register',
@@ -40,15 +42,19 @@ export class RegisterComponent {
   isLoading = false;
   showPassword = false;
   showConfirmPassword = false;
+  private userSub?: Subscription;
 
   constructor(
     private authService: AuthService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private logger: LoggerService
   ) {}
 
   async onSubmit(): Promise<void> {
+    this.logger.info('Registration form submitted', this.credentials);
     if (!this.validateForm()) {
+      this.logger.warn('Registration form validation failed');
       return;
     }
 
@@ -58,12 +64,21 @@ export class RegisterComponent {
       const result = await this.authService.register(this.credentials);
 
       if (result.success) {
+        this.logger.info('Registration successful, navigating to /timer');
         this.showMessage(result.message, 'success');
-        this.router.navigate(['/timer']);
+        localStorage.setItem('showWelcomeSnackbar', 'true');
+        this.userSub = this.authService.user$.subscribe(user => {
+          if (user) {
+            this.router.navigate(['/timer']);
+            this.userSub?.unsubscribe();
+          }
+        });
       } else {
+        this.logger.warn('Registration failed', result);
         this.showMessage(result.message, 'error');
       }
     } catch (error) {
+      this.logger.error('Registration error', error);
       this.showMessage('An error occurred during registration', 'error');
     } finally {
       this.isLoading = false;

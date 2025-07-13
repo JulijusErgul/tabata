@@ -32,6 +32,11 @@
         </mat-form-field>
       </div>
 
+      <button mat-raised-button color="primary" class="w-full mb-4 font-bold apply-settings-btn" (click)="applySettings()">
+        <mat-icon>check_circle</mat-icon>
+        Apply Settings
+      </button>
+
       <div class="summary-info">
         <mat-chip-set>
           <mat-chip color="primary" selected>
@@ -112,6 +117,31 @@
           Reset
         </button>
       </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Previous Workouts -->
+  <mat-card class="workouts-card" *ngIf="previousWorkouts.length > 0">
+    <mat-card-header>
+      <mat-card-title>Previous Workouts</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <table class="workouts-table">
+        <thead>
+          <tr>
+            <th>Date & Time</th>
+            <th>Rounds</th>
+            <th>Work (sec)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let w of previousWorkouts">
+            <td>{{ w.date | date:'medium' }}</td>
+            <td>{{ w.rounds }}</td>
+            <td>{{ w.workSeconds }}</td>
+          </tr>
+        </tbody>
+      </table>
     </mat-card-content>
   </mat-card>
 </div>

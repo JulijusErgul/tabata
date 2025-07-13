@@ -5,9 +5,41 @@
   font-family: 'Roboto', sans-serif;
 }
 
+/* Modern Settings Card Header */
 .settings-card {
-  margin-bottom: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 24px;
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.08);
+  background: rgba(255,255,255,0.95);
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+}
+
+.settings-card mat-card-header {
+  display: flex;
+  align-items: center;
+  background: transparent;
+  margin: 0;
+  padding: 0;
+  border-radius: 20px 20px 0 0;
+  position: relative;
+  min-height: 64px;
+}
+
+.settings-card mat-card-title {
+  font-size: 2rem;
+  font-weight: 800;
+  margin: 0 0 20px 24px;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -1px;
+  z-index: 1;
+}
+
+.settings-card mat-card-content {
+  padding-top: 0;
 }
 
 .settings-grid {
@@ -172,4 +204,101 @@ mat-form-field {
 /* Divider styling */
 mat-divider {
   margin: 20px 0;
+}
+
+/* Workouts Table Styling (Tailwind-inspired) */
+.workouts-card {
+  margin-top: 32px;
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.08);
+  background: rgba(255,255,255,0.95);
+  border-radius: 16px;
+  overflow-x: auto;
+}
+
+.workouts-card mat-card-header {
+  background: transparent;
+  margin: 0;
+  padding: 0 0 0 16px;
+  border-radius: 16px 16px 0 0;
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+}
+
+.workouts-card mat-card-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.5px;
+}
+
+.workouts-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: transparent;
+  font-size: 1rem;
+  color: #2c3e50;
+}
+
+.workouts-table th, .workouts-table td {
+  padding: 12px 16px;
+  text-align: left;
+}
+
+.workouts-table th {
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-weight: 700;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+.workouts-table tr {
+  transition: background 0.2s;
+}
+
+.workouts-table tbody tr:nth-child(even) {
+  background: rgba(102, 126, 234, 0.06);
+}
+
+.workouts-table tbody tr:hover {
+  background: rgba(102, 126, 234, 0.12);
+}
+
+.workouts-table td {
+  border-bottom: 1px solid #e0e7ef;
+}
+
+.workouts-table tr:last-child td {
+  border-bottom: none;
+}
+
+@media (max-width: 600px) {
+  .workouts-table th, .workouts-table td {
+    padding: 8px 6px;
+    font-size: 0.95rem;
+  }
+  .workouts-card {
+    margin-top: 20px;
+    border-radius: 12px;
+  }
+}
+
+@media (max-width: 600px) {
+  .settings-card {
+    border-radius: 14px;
+    margin-bottom: 14px;
+  }
+  .settings-card mat-card-header {
+    min-height: 48px;
+  }
+  .settings-card mat-card-title {
+    font-size: 1.3rem;
+    margin: 0 0 12px 14px;
+  }
 }

@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Router } from '@angular/router';
-import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, user, User as FirebaseUser } from '@angular/fire/auth';
+import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, user, User as FirebaseUser, updateProfile } from '@angular/fire/auth';
+import { LoggerService } from './logger.service';
 
 export interface User {
   uid: string;
@@ -30,7 +31,7 @@ export class AuthService {
   public currentUser$ = this.currentUserSubject.asObservable();
   public user$: Observable<FirebaseUser | null>;
 
-  constructor(private router: Router, private auth: Auth) {
+  constructor(private router: Router, private auth: Auth, private logger: LoggerService) {
     this.user$ = user(this.auth);
     this.user$.subscribe((firebaseUser: FirebaseUser | null) => {
       if (firebaseUser) {
@@ -41,13 +42,16 @@ export class AuthService {
           photoURL: firebaseUser.photoURL
         };
         this.currentUserSubject.next(user);
+        this.logger.info('User authenticated', user);
       } else {
         this.currentUserSubject.next(null);
+        this.logger.info('User signed out or not authenticated');
       }
     });
   }
 
   async register(credentials: RegisterCredentials): Promise<{ success: boolean; message: string }> {
+    this.logger.info('Attempting registration', credentials);
     try {
       // Validate passwords match
       if (credentials.password !== credentials.confirmPassword) {
@@ -76,17 +80,21 @@ export class AuthService {
         credentials.email,
         credentials.password
       );
+      this.logger.info('Registration successful', { email: credentials.email });
+      // Save username-email mapping to localStorage
+      this.saveUsernameEmailMapping(credentials.username, credentials.email);
 
       // Update display name
       if (userCredential.user) {
-        await (userCredential.user as any).updateProfile({
+        await updateProfile(userCredential.user, {
           displayName: credentials.username
         });
+        this.logger.info('Display name set after registration', { displayName: credentials.username });
       }
 
       return { success: true, message: 'Registration successful!' };
     } catch (error: any) {
-      console.error('Registration error:', error);
+      this.logger.error('Registration error', error, JSON.stringify(error), String(error));
       
       // Handle Firebase Auth errors
       if (error.code === 'auth/email-already-in-use') {
@@ -102,22 +110,32 @@ export class AuthService {
   }
 
   async login(credentials: LoginCredentials): Promise<{ success: boolean; message: string }> {
+    this.logger.info('Attempting login', credentials);
     try {
-      // For Firebase Auth, we'll use email for login
-      // You might want to store username-email mappings in Firestore for username login
+      let email = credentials.usernameOrEmail;
+      if (!this.isEmail(email)) {
+        // Try to look up email by username
+        const foundEmail = this.getEmailByUsername(email);
+        if (!foundEmail) {
+          this.logger.warn('Login failed: Username not found');
+          return { success: false, message: 'Username not found' };
+        }
+        email = foundEmail;
+      }
       const userCredential = await signInWithEmailAndPassword(
         this.auth,
-        credentials.usernameOrEmail, // Assuming this is an email
+        email,
         credentials.password
       );
-
       if (userCredential.user) {
+        this.logger.info('Login successful', { email: userCredential.user.email });
         return { success: true, message: 'Login successful!' };
       } else {
+        this.logger.warn('Login failed: Invalid email or password');
         return { success: false, message: 'Invalid email or password' };
       }
     } catch (error: any) {
-      console.error('Login error:', error);
+      this.logger.error('Login error', error, JSON.stringify(error), String(error));
       
       // Handle Firebase Auth errors
       if (error.code === 'auth/user-not-found') {
@@ -133,11 +151,13 @@ export class AuthService {
   }
 
   async logout(): Promise<void> {
+    this.logger.info('Attempting logout');
     try {
       await signOut(this.auth);
+      this.logger.info('Logout successful');
       this.router.navigate(['/login']);
     } catch (error) {
-      console.error('Logout error:', error);
+      this.logger.error('Logout error', error, JSON.stringify(error), String(error));
     }
   }
 
@@ -147,5 +167,26 @@ export class AuthService {
 
   isLoggedIn(): boolean {
     return this.currentUserSubject.value !== null;
+  }
+
+  private saveUsernameEmailMapping(username: string, email: string) {
+    const key = 'tabataUsernames';
+    const arr = JSON.parse(localStorage.getItem(key) || '[]');
+    // Remove any previous mapping for this username
+    const filtered = arr.filter((entry: any) => entry.username !== username);
+    filtered.push({ username, email });
+    localStorage.setItem(key, JSON.stringify(filtered));
+    this.logger.info('Saved username-email mapping', { username, email });
+  }
+
+  private getEmailByUsername(username: string): string | null {
+    const key = 'tabataUsernames';
+    const arr = JSON.parse(localStorage.getItem(key) || '[]');
+    const found = arr.find((entry: any) => entry.username === username);
+    return found ? found.email : null;
+  }
+
+  private isEmail(value: string): boolean {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
   }
 }

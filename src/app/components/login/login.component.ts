@@ -11,6 +11,8 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AuthService, LoginCredentials } from '../../services/auth.service';
+import { Subscription } from 'rxjs';
+import { LoggerService } from '../../services/logger.service';
 
 @Component({
   selector: 'app-login',
@@ -37,15 +39,19 @@ export class LoginComponent {
 
   isLoading = false;
   showPassword = false;
+  private userSub?: Subscription;
 
   constructor(
     private authService: AuthService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private logger: LoggerService
   ) {}
 
   async onSubmit(): Promise<void> {
+    this.logger.info('Login form submitted', this.credentials);
     if (!this.credentials.usernameOrEmail || !this.credentials.password) {
+      this.logger.warn('Login form incomplete');
       this.showMessage('Please fill in all fields', 'error');
       return;
     }
@@ -56,12 +62,20 @@ export class LoginComponent {
       const result = await this.authService.login(this.credentials);
 
       if (result.success) {
+        this.logger.info('Login successful, navigating to /timer');
         this.showMessage(result.message, 'success');
-        this.router.navigate(['/timer']);
+        this.userSub = this.authService.user$.subscribe(user => {
+          if (user) {
+            this.router.navigate(['/timer']);
+            this.userSub?.unsubscribe();
+          }
+        });
       } else {
+        this.logger.warn('Login failed', result);
         this.showMessage(result.message, 'error');
       }
     } catch (error) {
+      this.logger.error('Login error', error);
       this.showMessage('An error occurred during login', 'error');
     } finally {
       this.isLoading = false;
