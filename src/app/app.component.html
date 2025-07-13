@@ -4,7 +4,7 @@
     <div class="header-content">
       <h1 class="app-title">⏱️ Tabata Timer</h1>
       <div class="user-section">
-        <span class="welcome-text">Welcome, {{ authService.getCurrentUser()?.username }}!</span>
+        <span class="welcome-text">Welcome, {{ authService.getCurrentUser()?.displayName || authService.getCurrentUser()?.email }}!</span>
         <button mat-icon-button (click)="authService.logout()" class="logout-btn">
           <mat-icon>logout</mat-icon>
         </button>

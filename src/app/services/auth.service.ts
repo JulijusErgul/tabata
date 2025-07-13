@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, user, User as FirebaseUser } from '@angular/fire/auth';
 
 export interface User {
-  id: number;
-  username: string;
-  email: string;
-  created_at: string;
+  uid: string;
+  email: string | null;
+  displayName?: string | null;
+  photoURL?: string | null;
 }
 
 export interface LoginCredentials {
@@ -27,21 +28,23 @@ export interface RegisterCredentials {
 export class AuthService {
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
+  public user$: Observable<FirebaseUser | null>;
 
-  constructor(private router: Router) {
-    this.loadUserFromStorage();
-  }
-
-  private loadUserFromStorage(): void {
-    const userStr = localStorage.getItem('currentUser');
-    if (userStr) {
-      try {
-        const user = JSON.parse(userStr);
+  constructor(private router: Router, private auth: Auth) {
+    this.user$ = user(this.auth);
+    this.user$.subscribe((firebaseUser: FirebaseUser | null) => {
+      if (firebaseUser) {
+        const user: User = {
+          uid: firebaseUser.uid,
+          email: firebaseUser.email,
+          displayName: firebaseUser.displayName,
+          photoURL: firebaseUser.photoURL
+        };
         this.currentUserSubject.next(user);
-      } catch (error) {
-        localStorage.removeItem('currentUser');
+      } else {
+        this.currentUserSubject.next(null);
       }
-    }
+    });
   }
 
   async register(credentials: RegisterCredentials): Promise<{ success: boolean; message: string }> {
@@ -67,54 +70,75 @@ export class AuthService {
         return { success: false, message: 'Username must be at least 3 characters long' };
       }
 
-      // Check if user already exists
-      const existingUser = await this.checkUserExists(credentials.username, credentials.email);
-      if (existingUser) {
-        return { success: false, message: existingUser };
+      // Create user with Firebase Auth
+      const userCredential = await createUserWithEmailAndPassword(
+        this.auth,
+        credentials.email,
+        credentials.password
+      );
+
+      // Update display name
+      if (userCredential.user) {
+        await (userCredential.user as any).updateProfile({
+          displayName: credentials.username
+        });
       }
 
-      // Hash password and create user
-      const hashedPassword = await this.hashPassword(credentials.password);
-      const user = await this.createUser({
-        username: credentials.username,
-        email: credentials.email,
-        password: hashedPassword
-      });
-
-      if (user) {
-        this.currentUserSubject.next(user);
-        localStorage.setItem('currentUser', JSON.stringify(user));
-        return { success: true, message: 'Registration successful!' };
-      } else {
-        return { success: false, message: 'Failed to create user' };
-      }
-    } catch (error) {
+      return { success: true, message: 'Registration successful!' };
+    } catch (error: any) {
       console.error('Registration error:', error);
+      
+      // Handle Firebase Auth errors
+      if (error.code === 'auth/email-already-in-use') {
+        return { success: false, message: 'Email already exists' };
+      } else if (error.code === 'auth/weak-password') {
+        return { success: false, message: 'Password is too weak' };
+      } else if (error.code === 'auth/invalid-email') {
+        return { success: false, message: 'Invalid email address' };
+      }
+      
       return { success: false, message: 'An error occurred during registration' };
     }
   }
 
   async login(credentials: LoginCredentials): Promise<{ success: boolean; message: string }> {
     try {
-      const user = await this.authenticateUser(credentials.usernameOrEmail, credentials.password);
+      // For Firebase Auth, we'll use email for login
+      // You might want to store username-email mappings in Firestore for username login
+      const userCredential = await signInWithEmailAndPassword(
+        this.auth,
+        credentials.usernameOrEmail, // Assuming this is an email
+        credentials.password
+      );
 
-      if (user) {
-        this.currentUserSubject.next(user);
-        localStorage.setItem('currentUser', JSON.stringify(user));
+      if (userCredential.user) {
         return { success: true, message: 'Login successful!' };
       } else {
-        return { success: false, message: 'Invalid username/email or password' };
+        return { success: false, message: 'Invalid email or password' };
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Login error:', error);
+      
+      // Handle Firebase Auth errors
+      if (error.code === 'auth/user-not-found') {
+        return { success: false, message: 'User not found' };
+      } else if (error.code === 'auth/wrong-password') {
+        return { success: false, message: 'Invalid password' };
+      } else if (error.code === 'auth/invalid-email') {
+        return { success: false, message: 'Invalid email address' };
+      }
+      
       return { success: false, message: 'An error occurred during login' };
     }
   }
 
-  logout(): void {
-    this.currentUserSubject.next(null);
-    localStorage.removeItem('currentUser');
-    this.router.navigate(['/login']);
+  async logout(): Promise<void> {
+    try {
+      await signOut(this.auth);
+      this.router.navigate(['/login']);
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
   }
 
   getCurrentUser(): User | null {
@@ -123,69 +147,5 @@ export class AuthService {
 
   isLoggedIn(): boolean {
     return this.currentUserSubject.value !== null;
-  }
-
-  // Database methods (these would be implemented with actual SQLite)
-  private async checkUserExists(username: string, email: string): Promise<string | null> {
-    // Simulate database check
-    const users = this.getStoredUsers();
-    if (users.find(u => u.username === username)) {
-      return 'Username already exists';
-    }
-    if (users.find(u => u.email === email)) {
-      return 'Email already exists';
-    }
-    return null;
-  }
-
-  private async createUser(userData: { username: string; email: string; password: string }): Promise<User | null> {
-    // Simulate database creation
-    const users = this.getStoredUsers();
-    const newUser: User = {
-      id: Date.now(),
-      username: userData.username,
-      email: userData.email,
-      created_at: new Date().toISOString()
-    };
-
-    users.push({
-      ...newUser,
-      password: userData.password
-    });
-
-    this.storeUsers(users);
-    return newUser;
-  }
-
-  private async authenticateUser(usernameOrEmail: string, password: string): Promise<User | null> {
-    // Simulate database authentication
-    const users = this.getStoredUsers();
-    const user = users.find(u =>
-      (u.username === usernameOrEmail || u.email === usernameOrEmail) &&
-      u.password === password
-    );
-
-    if (user) {
-      const { password: _, ...userWithoutPassword } = user;
-      return userWithoutPassword as User;
-    }
-
-    return null;
-  }
-
-  private async hashPassword(password: string): Promise<string> {
-    // In a real implementation, you would use bcrypt
-    // For now, we'll use a simple hash for demonstration
-    return btoa(password); // Base64 encoding (not secure, just for demo)
-  }
-
-  // Local storage methods for demo purposes
-  private getStoredUsers(): any[] {
-    const usersStr = localStorage.getItem('users');
-    return usersStr ? JSON.parse(usersStr) : [];
-  }
-
-  private storeUsers(users: any[]): void {
-    localStorage.setItem('users', JSON.stringify(users));
   }
 }
