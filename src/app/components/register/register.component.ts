@@ -85,6 +85,31 @@ export class RegisterComponent {
     }
   }
 
+  async registerWithGoogle(): Promise<void> {
+    this.isLoading = true;
+    try {
+      const result = await this.authService.signInWithGoogle();
+      if (result.success) {
+        this.logger.info('Google registration successful, waiting for user observable');
+        this.showMessage(result.message, 'success');
+        this.userSub = this.authService.user$.subscribe(user => {
+          if (user) {
+            this.router.navigate(['/timer']);
+            this.userSub?.unsubscribe();
+          }
+        });
+      } else {
+        this.logger.warn('Google registration failed', result);
+        this.showMessage(result.message, 'error');
+      }
+    } catch (error) {
+      this.logger.error('Google registration error', error);
+      this.showMessage('An error occurred during Google registration', 'error');
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
   private validateForm(): boolean {
     if (!this.credentials.username || !this.credentials.email ||
         !this.credentials.password || !this.credentials.confirmPassword) {

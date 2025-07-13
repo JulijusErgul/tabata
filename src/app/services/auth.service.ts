@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Router } from '@angular/router';
-import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, user, User as FirebaseUser, updateProfile } from '@angular/fire/auth';
+import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, user, User as FirebaseUser, updateProfile, GoogleAuthProvider, signInWithPopup } from '@angular/fire/auth';
 import { LoggerService } from './logger.service';
 
 export interface User {
@@ -158,6 +158,23 @@ export class AuthService {
       this.router.navigate(['/login']);
     } catch (error) {
       this.logger.error('Logout error', error, JSON.stringify(error), String(error));
+    }
+  }
+
+  async signInWithGoogle(): Promise<{ success: boolean; message: string }> {
+    try {
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(this.auth, provider);
+      if (result.user) {
+        this.logger.info('Google sign-in successful', { email: result.user.email });
+        return { success: true, message: 'Login successful!' };
+      } else {
+        this.logger.warn('Google sign-in failed: No user');
+        return { success: false, message: 'Google sign-in failed' };
+      }
+    } catch (error: any) {
+      this.logger.error('Google sign-in error', error, JSON.stringify(error), String(error));
+      return { success: false, message: 'An error occurred during Google sign-in' };
     }
   }
 

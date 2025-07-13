@@ -82,6 +82,31 @@ export class LoginComponent {
     }
   }
 
+  async loginWithGoogle(): Promise<void> {
+    this.isLoading = true;
+    try {
+      const result = await this.authService.signInWithGoogle();
+      if (result.success) {
+        this.logger.info('Google login successful, waiting for user observable');
+        this.showMessage(result.message, 'success');
+        this.userSub = this.authService.user$.subscribe(user => {
+          if (user) {
+            this.router.navigate(['/timer']);
+            this.userSub?.unsubscribe();
+          }
+        });
+      } else {
+        this.logger.warn('Google login failed', result);
+        this.showMessage(result.message, 'error');
+      }
+    } catch (error) {
+      this.logger.error('Google login error', error);
+      this.showMessage('An error occurred during Google login', 'error');
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
   togglePasswordVisibility(): void {
     this.showPassword = !this.showPassword;
   }

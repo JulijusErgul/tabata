@@ -47,6 +47,17 @@
           <mat-spinner *ngIf="isLoading" diameter="20"></mat-spinner>
           {{ isLoading ? 'Signing In...' : 'Sign In' }}
         </button>
+
+        <button
+          mat-stroked-button
+          color="primary"
+          type="button"
+          class="google-login-button"
+          (click)="loginWithGoogle()"
+          [disabled]="isLoading">
+          <mat-icon svgIcon="google"></mat-icon>
+          Sign in with Google
+        </button>
       </form>
 
       <mat-divider class="divider"></mat-divider>

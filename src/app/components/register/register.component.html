@@ -106,6 +106,17 @@
           <mat-spinner *ngIf="isLoading" diameter="20"></mat-spinner>
           {{ isLoading ? 'Creating Account...' : 'Create Account' }}
         </button>
+
+        <button
+          mat-stroked-button
+          color="primary"
+          type="button"
+          class="google-register-button"
+          (click)="registerWithGoogle()"
+          [disabled]="isLoading">
+          <mat-icon svgIcon="google"></mat-icon>
+          Sign up with Google
+        </button>
       </form>
 
       <mat-divider class="divider"></mat-divider>

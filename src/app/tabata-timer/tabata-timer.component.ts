@@ -11,6 +11,8 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { LoggerService } from '../services/logger.service';
+import { WorkoutService, PreviousWorkout } from '../services/workout.service';
+import { Subscription } from 'rxjs';
 
 export interface TabataSettings {
   rounds: number;
@@ -18,12 +20,6 @@ export interface TabataSettings {
   restSeconds: number;
   restFrequency: number; // How often rest occurs (every N rounds)
   restBetweenRounds: number; // Rest time between complete rounds
-}
-
-export interface PreviousWorkout {
-  date: string; // ISO string
-  rounds: number;
-  workSeconds: number;
 }
 
 @Component({
@@ -61,12 +57,15 @@ export class TabataTimerComponent implements OnInit, OnDestroy {
   totalTime = 0;
   private interval: any;
   previousWorkouts: PreviousWorkout[] = [];
+  private workoutsSub?: Subscription;
 
-  constructor(private snackBar: MatSnackBar, private logger: LoggerService) {}
+  constructor(private snackBar: MatSnackBar, private logger: LoggerService, private workoutService: WorkoutService) {}
 
   ngOnInit() {
     this.resetTimer();
-    this.loadPreviousWorkouts();
+    this.workoutsSub = this.workoutService.getWorkouts().subscribe(workouts => {
+      this.previousWorkouts = workouts;
+    });
     // Show welcome snackbar if just registered
     if (localStorage.getItem('showWelcomeSnackbar') === 'true') {
       this.snackBar.open('Welcome to Tabata Timer! 🎉', 'Close', {
@@ -83,6 +82,7 @@ export class TabataTimerComponent implements OnInit, OnDestroy {
     if (this.interval) {
       clearInterval(this.interval);
     }
+    this.workoutsSub?.unsubscribe();
   }
 
   startTimer() {
@@ -214,19 +214,7 @@ export class TabataTimerComponent implements OnInit, OnDestroy {
       workSeconds: this.settings.workSeconds
     };
     this.logger.info('Workout saved', workout);
-    const workouts = this.getStoredWorkouts();
-    workouts.unshift(workout); // newest first
-    localStorage.setItem('tabataWorkouts', JSON.stringify(workouts));
-    this.previousWorkouts = workouts;
-  }
-
-  loadPreviousWorkouts() {
-    this.previousWorkouts = this.getStoredWorkouts();
-  }
-
-  getStoredWorkouts(): PreviousWorkout[] {
-    const str = localStorage.getItem('tabataWorkouts');
-    return str ? JSON.parse(str) : [];
+    this.workoutService.addWorkout(workout);
   }
 
   applySettings() {

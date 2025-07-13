@@ -201,6 +201,19 @@ mat-form-field {
   width: 100%;
 }
 
+.settings-grid mat-form-field.mat-form-field {
+  background: #fff;
+  border: 1.5px solid #e0e7ef;
+  border-radius: 10px;
+  padding: 0 8px;
+  margin-bottom: 4px;
+  box-shadow: 0 1px 2px rgba(102, 126, 234, 0.04);
+  transition: border-color 0.2s;
+}
+.settings-grid mat-form-field.mat-form-field.mat-focused {
+  border-color: #667eea;
+}
+
 /* Divider styling */
 mat-divider {
   margin: 20px 0;
@@ -301,4 +314,45 @@ mat-divider {
     font-size: 1.3rem;
     margin: 0 0 12px 14px;
   }
+}
+
+.phase-title {
+  font-size: 2rem;
+  font-weight: 800;
+  margin: 0 auto 16px auto;
+  background: linear-gradient(90deg, #ffe259, #ffa751);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -1px;
+  text-align: center;
+  display: block;
+}
+
+.reset-btn.mat-warn {
+  background: linear-gradient(90deg, #ffe259 0%, #ffa751 100%);
+  color: #333 !important;
+  font-weight: 700;
+  border-radius: 24px;
+  box-shadow: 0 2px 8px rgba(255, 202, 40, 0.08);
+  transition: background 0.2s, color 0.2s;
+}
+.reset-btn.mat-warn:hover,
+.reset-btn.mat-warn:focus {
+  background: linear-gradient(90deg, #ffd600 0%, #ffb300 100%);
+  color: #222 !important;
+}
+
+.control-btn.mat-primary {
+  background: linear-gradient(90deg, #43e97b 0%, #38f9d7 100%);
+  color: #fff !important;
+  font-weight: 700;
+  border-radius: 24px;
+  box-shadow: 0 2px 8px rgba(67, 233, 123, 0.08);
+  transition: background 0.2s, color 0.2s;
+}
+.control-btn.mat-primary:hover,
+.control-btn.mat-primary:focus {
+  background: linear-gradient(90deg, #11998e 0%, #38ef7d 100%);
+  color: #fff !important;
 }

@@ -6,27 +6,27 @@
     </mat-card-header>
     <mat-card-content>
       <div class="settings-grid">
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>Number of Rounds</mat-label>
           <input matInput type="number" [(ngModel)]="settings.rounds" min="1" max="20">
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>Work Time (seconds)</mat-label>
           <input matInput type="number" [(ngModel)]="settings.workSeconds" min="5" max="300">
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>Rest Time (seconds)</mat-label>
           <input matInput type="number" [(ngModel)]="settings.restSeconds" min="5" max="120">
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>Rest Frequency (every N rounds)</mat-label>
           <input matInput type="number" [(ngModel)]="settings.restFrequency" min="1" max="10">
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>Rest Between Rounds (seconds)</mat-label>
           <input matInput type="number" [(ngModel)]="settings.restBetweenRounds" min="0" max="300">
         </mat-form-field>
@@ -55,9 +55,7 @@
     <mat-card-content>
       <div class="timer-display">
         <div class="phase-indicator">
-          <mat-chip [color]="getPhaseColor()" selected class="phase-chip">
-            {{ getPhaseText() }}
-          </mat-chip>
+          <div class="phase-title">{{ getPhaseText() }}</div>
         </div>
 
         <div class="time-display">
@@ -109,10 +107,11 @@
         </button>
 
         <button
-          mat-stroked-button
+          mat-raised-button
+          color="warn"
           (click)="resetTimer()"
           [disabled]="isRunning"
-          class="control-btn">
+          class="control-btn reset-btn">
           <mat-icon>refresh</mat-icon>
           Reset
         </button>

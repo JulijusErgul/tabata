@@ -170,7 +170,7 @@
   background: linear-gradient(135deg, #667eea, #764ba2);
   border: none;
   border-radius: 16px;
-  color: white;
+  color: white !important;
   text-transform: none;
   letter-spacing: 0.5px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -178,20 +178,21 @@
 }
 
 .login-button:hover:not(:disabled) {
+  color: white !important;
   transform: translateY(-2px);
   box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
   background: linear-gradient(135deg, #5a6fd8, #6a4190);
 }
 
 .login-button:disabled {
+  color: white !important;
   background: #bdc3c7;
   box-shadow: none;
   transform: none;
 }
 
-.login-button mat-icon {
-  margin-right: 0;
-  font-size: 20px;
+.login-button mat-icon, .login-button mat-spinner {
+  color: white !important;
 }
 
 .divider {
